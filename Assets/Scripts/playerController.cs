@@ -7,12 +7,13 @@ public class playerController : MonoBehaviour
 {
     [SerializeField] InputAction movement;
     [SerializeField] float movementSpeed = 5f;
-    [SerializeField] float xClamp = 6.3f;
-    [SerializeField] float yClamp = 4.5f;
+    [SerializeField] float rotationSpeed = 5f;
+
 
     // stores values when player presses w, a, s, or d
-    float xInput;
-    float yInput;
+    Vector2 movementDirection;
+    float horizontalInput;
+    float verticalInput;
     
  
     void OnEnable()
@@ -31,28 +32,31 @@ public class playerController : MonoBehaviour
     void Update()
     {
         ProcessMovement();
-
+        ProcessRotation();
     }
 
 
     void ProcessMovement()
     {
-        xInput = movement.ReadValue<Vector2>().x;
-        yInput = movement.ReadValue<Vector2>().y;
+        horizontalInput = movement.ReadValue<Vector2>().x;
+        verticalInput = movement.ReadValue<Vector2>().y;
 
-        transform.position = new Vector2(transform.localPosition.x, transform.localPosition.y);
+        movementDirection = new Vector2(horizontalInput, verticalInput);
+        float inputMagnitude = Mathf.Clamp01(movementDirection.magnitude);
+        movementDirection.Normalize();
 
-        float xOffset = xInput * Time.deltaTime * movementSpeed;
-        float yOffset = yInput * Time.deltaTime * movementSpeed;
-
-        float rawXPos = transform.localPosition.x + xOffset;
-        float rawYPos = transform.localPosition.y + yOffset;
-
-        float clampXPos = Mathf.Clamp(rawXPos, -xClamp, xClamp);
-        float clampYPos = Mathf.Clamp(rawYPos, -yClamp, yClamp);
+        transform.Translate(movementDirection * movementSpeed * inputMagnitude * Time.deltaTime, Space.World);
+    }
 
 
-        transform.position = new Vector2(rawXPos, rawYPos);
+    void ProcessRotation()
+    {
+        if (movementDirection != Vector2.zero)
+        {
+            Quaternion toRotation = Quaternion.LookRotation(Vector3.forward, -movementDirection);
+            transform.rotation = Quaternion.RotateTowards(transform.rotation, toRotation, rotationSpeed * Time.deltaTime);
+        }
+
     }
 
 }
