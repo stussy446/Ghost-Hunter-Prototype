@@ -10,17 +10,38 @@ public class Damageable : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D collision)
     {
+        TakeDamage();
+    }
+
+
+    void OnTriggerEnter2D(Collider2D collision)
+    {
+        TakeDamage();
+    }
+
+
+    void TakeDamage()
+    {
         healthPoints -= damageTaken;
         GetComponent<SpriteRenderer>().color = Color.red;
         Invoke("DestroyOnNoHealth", damageDelay); ;
     }
+
 
     // if the objects healthpoints reach 0, destroy the object 
     void DestroyOnNoHealth()
     {
         if (healthPoints <= float.Epsilon)
         {
-            Destroy(gameObject);
+            if (gameObject.transform.parent != null && gameObject.layer != LayerMask.GetMask("Enemies"))
+            {
+                Destroy(transform.parent.gameObject);
+            }
+            else
+            {
+                Destroy(gameObject);
+            }
+            
         }
         GetComponent<SpriteRenderer>().color = Color.white;
     }
