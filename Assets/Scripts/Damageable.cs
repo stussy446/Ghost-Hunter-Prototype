@@ -22,9 +22,11 @@ public class Damageable : MonoBehaviour
 
     void TakeDamage()
     {
+       
         healthPoints -= damageTaken;
         GetComponent<SpriteRenderer>().color = Color.red;
         Invoke("DestroyOnNoHealth", damageDelay); ;
+        
     }
 
 
