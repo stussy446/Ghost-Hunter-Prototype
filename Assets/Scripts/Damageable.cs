@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Damageable : MonoBehaviour
 {
@@ -34,7 +35,13 @@ public class Damageable : MonoBehaviour
     void DestroyOnNoHealth()
     {
         if (healthPoints <= float.Epsilon)
-        {
+
+            if(gameObject.name == "Player")
+            {
+                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+            }
+
+        
             if (gameObject.transform.parent != null && gameObject.layer != LayerMask.GetMask("Enemies"))
             {
                 Destroy(transform.parent.gameObject);
@@ -42,9 +49,9 @@ public class Damageable : MonoBehaviour
             else
             {
                 Destroy(gameObject);
+
             }
             
-        }
         GetComponent<SpriteRenderer>().color = Color.white;
     }
 }
