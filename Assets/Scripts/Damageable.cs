@@ -40,17 +40,11 @@ public class Damageable : MonoBehaviour
             {
                 SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
             }
-
-        
-            if (gameObject.transform.parent != null && gameObject.layer != LayerMask.GetMask("Enemies"))
-            {
-                Destroy(transform.parent.gameObject);
-            }
             else
             {
                 Destroy(gameObject);
-
             }
+
             
         GetComponent<SpriteRenderer>().color = Color.white;
     }

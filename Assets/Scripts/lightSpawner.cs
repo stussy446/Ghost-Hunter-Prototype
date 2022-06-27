@@ -1,13 +1,33 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class lightSpawner : MonoBehaviour
 {
-    [SerializeField] GameObject lightObject;
-    [SerializeField] playerController pController;
+    [SerializeField] InputAction flashlight;
+    SpriteRenderer spriteRenderer;
+    CapsuleCollider2D capsuleColl2D;
 
-  
+
+    private void Awake()
+    {
+        spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
+        capsuleColl2D = gameObject.GetComponent<CapsuleCollider2D>();
+
+
+    }
+
+    void OnEnable()
+    {
+        flashlight.Enable();
+    }
+
+    private void OnDisable()
+    {
+        flashlight.Disable();
+    }
+
     void Update()
     {
         TurnOnLight();
@@ -17,13 +37,15 @@ public class lightSpawner : MonoBehaviour
     // turns the light object on when the left mouse button is held down
     void TurnOnLight()
     {
-        if (pController.ToggleLight())
+        if (flashlight.IsPressed())
         {
-            lightObject.SetActive(true);
+            spriteRenderer.enabled = true;
+            capsuleColl2D.enabled = true;
         }
         else
         {
-            lightObject.SetActive(false); 
+            spriteRenderer.enabled = false;
+            capsuleColl2D.enabled = false;
         }
         
     }
