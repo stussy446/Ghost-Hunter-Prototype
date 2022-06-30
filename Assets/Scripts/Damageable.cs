@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,6 +9,14 @@ public class Damageable : MonoBehaviour
     [SerializeField] float healthPoints = 1f;
     [SerializeField] float damageTaken = 1f;
     [SerializeField] float damageDelay = .2f;
+    [SerializeField] int pointsToAdd = 1;
+
+    GameSession gameSession;
+
+    void Awake()
+    {
+        gameSession = FindObjectOfType<GameSession>();
+    }
 
     void OnCollisionEnter2D(Collision2D collision)
     {
@@ -34,18 +43,21 @@ public class Damageable : MonoBehaviour
     // if the objects healthpoints reach 0, destroy the object 
     void DestroyOnNoHealth()
     {
-        if (healthPoints <= float.Epsilon)
+       if (healthPoints <= float.Epsilon)
 
             if(gameObject.name == "Player")
             {
-                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+                gameSession.ProcessPlayerDeath();
             }
             else
             {
+                gameSession.AddPoints(pointsToAdd);
                 Destroy(gameObject);
             }
 
             
         GetComponent<SpriteRenderer>().color = Color.white;
     }
+
+   
 }

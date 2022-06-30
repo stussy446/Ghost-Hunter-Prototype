@@ -9,25 +9,24 @@ public class ReloadScene : MonoBehaviour
 {
 
     [SerializeField] InputAction quit;
-    [SerializeField] InputAction reload;
+    
 
     private void OnEnable()
     {
         quit.Enable();
-        reload.Enable();
+        
     }
 
     private void OnDisable()
     {
         quit.Disable();
-        reload.Disable();
+      
     }
 
     // Update is called once per frame
     void Update()
     {
         QuitGame();
-        ReloadGame();
     }
 
 
@@ -36,14 +35,6 @@ public class ReloadScene : MonoBehaviour
         if (quit.IsPressed())
         {
             Application.Quit();
-        }
-    }
-
-    void ReloadGame()
-    {
-        if (reload.IsPressed())
-        {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
     }
 }
